@@ -81,10 +81,12 @@ h1{
     color: var(--color-boton-texto);
     right: 1.5rem;
     top: 1.5rem;
+    z-index: 100;
 }
 
 /*-----Barra lateral------*/
 .sidebar{
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -93,7 +95,8 @@ h1{
     overflow: hidden;
     padding: 2rem 1.5rem;
     background-color: var(--color-barra-lateral);
-    transition: width .5s ease, background-color .3s ease;
+    transition: width .5s ease, background-color .3s ease, left .5s ease;
+    z-index: 50;
 }
 
 .mini_sidebar{
@@ -306,6 +309,17 @@ h1{
     font-size: 2rem;
 }
 
+/*-----Main-----*/
+
+main{
+    margin-left: 25rem;
+    padding: 2rem;
+    transition: margin-left .5s ease;
+}
+
+main.min_main{
+    margin-left: 8rem;
+}
 
 
 
@@ -323,10 +337,22 @@ h1{
 
 @media (max-width: 600px){
     .sidebar{
-        position: absolute;
+        position: fixed;
         left: -25rem;
+    }
+    .max_sidebar{
+        left: 0;
     }
     .menu{
         display: flex;
+    }
+    .menu ion-icon:nth-child(2){
+        display: none;
+    }
+    main{
+        margin-left: 0;
+    }
+    main.min_main{
+        margin-left: 0;
     }
 }
