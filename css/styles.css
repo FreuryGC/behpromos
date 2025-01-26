@@ -13,10 +13,13 @@
     --color-boton: #000000;
     --color-boton-texto: #ffffff;
 
-    --color-line: #dddddd;
+    --color-line: #d3d3d3;
 
     --color-switch-base: #c4c4c4;
     --color-switch-circle: #e9e9e9;
+
+    --color-scroll: #c4c4c4;
+    --color-scroll-hover: #b6b6b6;
 }
 
 .dark_mode{
@@ -31,10 +34,13 @@
     --color-boton: #ffffff;
     --color-boton-texto: #000000;
 
-    --color-line: #454545;
+    --color-line: #5d5d5d;
 
     --color-switch-base: #12db2c;
     --color-switch-circle: #ffffff;
+
+    --color-scroll: #606060;
+    --color-scroll-hover: #5e5e5e;
 }
 
 *{
@@ -60,7 +66,28 @@ h1{
     font-size: 3.8rem;
 }
 
+/*-----Menu-----*/
+.menu{
+    position: fixed;
+    width: 5rem;
+    height: 5rem;
+    font-size: 3rem;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+    right: 1.5rem;
+    top: 1.5rem;
+}
+
+/*-----Barra lateral------*/
 .sidebar{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 25rem;
     height: 100%;
     overflow: hidden;
@@ -128,6 +155,25 @@ h1{
 
 /*----------Menu navegacion---------*/
 
+.sidebar .navbar{
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar .navbar::-webkit-scrollbar{
+    width: .5rem;
+}
+
+.sidebar .navbar::-webkit-scrollbar-thumb{
+    background-color: var(--color-scroll);
+    border-radius: .5rem;
+}
+
+.sidebar .navbar::-webkit-scrollbar-thumb{
+    background-color: var(--color-scroll-hover);
+}
+
 .sidebar .navbar li{
     list-style: none;
     display: flex;
@@ -158,12 +204,14 @@ h1{
 .sidebar .line{
     width: 100%;
     height: .1rem;
+    margin-top: 1.5rem;
     background-color: var(--color-line);
 }
 
 /*----------Dark mode---------*/
 .sidebar .darkmode{
     width: 100%;
+    margin-bottom: 8rem;
     border-radius: 1rem;
     display: flex;
     justify-content: space-between
@@ -219,7 +267,6 @@ h1{
 
 /*----------Usuario---------*/
 .sidebar .user{
-    border: 2px solid red;
     width: 100%;
     display: flex;
 }
@@ -228,4 +275,58 @@ h1{
     width: 5rem;
     min-width: 5rem;
     border-radius: 1rem;
+}
+
+.sidebar .user .info_user{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-texto);
+    overflow: hidden;
+}
+
+.sidebar .user .name_email{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-left: .5rem;
+}
+
+.sidebar .user .name{
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.sidebar .user .email{
+    font-size: 1.3rem;
+}
+
+.sidebar .user .icon{
+    font-size: 2rem;
+}
+
+
+
+
+
+
+/*-------Media querys-------*/
+@media (max-height: 660px){
+    .sidebar .sidebar_title{
+        margin-bottom: .5rem;
+    }
+    .sidebar .darkmode{
+        margin-bottom: .3rem;
+    }
+}
+
+@media (max-width: 600px){
+    .sidebar{
+        position: absolute;
+        left: -25rem;
+    }
+    .menu{
+        display: flex;
+    }
 }
