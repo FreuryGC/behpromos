@@ -4,6 +4,11 @@ const sidebar = document.querySelector('.sidebar'); // Selecciona la barra later
 const spans = document.querySelectorAll('span'); // Selecciona el primer elemento <span>
 const darkmode_switch = document.querySelector('.switch'); // Selecciona el switch por clase
 const circle = document.querySelector('.circle'); // Selecciona el circulo por clase
+const menu = document.querySelector('.menu'); // Selecciona el menu por clase
+
+menu.addEventListener('click', () => {
+
+});
 
 darkmode_switch.addEventListener('click', () => {
     let body = document.body;
