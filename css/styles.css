@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
 
 :root{
@@ -321,8 +320,46 @@ main.min_main{
     margin-left: 8rem;
 }
 
+.map_container {
+    position: relative;
+    width: 100%;
+    max-width: 100rem;
+    height: 100%; /* Remueve el max-height si es necesario */
+    margin: 0 auto;
+}
 
 
+
+.store_map {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover; /* Asegura que el mapa cubra todo el área */
+    z-index: 1; /* Asegura que el mapa esté debajo de las áreas */
+}
+
+
+.heatmap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 20; /* Asegura que las áreas del mapa estén encima */
+}
+
+.map-section {
+    position: absolute;
+    background-color: rgba(0, 128, 255, 0.3); /* Color semi-transparente */
+    border: 2px solid rgba(0, 128, 255, 0.6);
+    cursor: pointer;
+    z-index: 100; /* Asegúrate de que las áreas tengan un z-index más alto */
+    transition: transform 0.2s ease-in-out;
+}
+
+.map-section:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al pasar el mouse */
+    background-color: rgba(0, 128, 255, 0.5);
+}
 
 
 /*-------Media querys-------*/
