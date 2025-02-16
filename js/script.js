@@ -4,7 +4,6 @@ const spans = document.querySelectorAll('span');
 const menu = document.querySelector('.menu');
 const main = document.querySelector("main");
 
-// Control de menú lateral
 menu.addEventListener('click', () => {
   sidebar.classList.toggle("max_sidebar");
   if (sidebar.classList.contains("max_sidebar")) {
@@ -27,7 +26,6 @@ logo.addEventListener('click', () => {
   spans.forEach(span => span.classList.toggle('hide'));
 });
 
-// Función para obtener datos de las áreas desde el servidor
 async function fetchAreasData() {
   try {
     const response = await fetch('/api/areas');
@@ -39,7 +37,6 @@ async function fetchAreasData() {
   }
 }
 
-// Función para obtener datos de las mesas desde el servidor
 async function fetchMesasData() {
   try {
     const response = await fetch('/api/mesas');
@@ -51,7 +48,6 @@ async function fetchMesasData() {
   }
 }
 
-// Función para dibujar áreas y mesas
 async function drawAreasAndTables() {
   const heatmapContainer = document.querySelector('.heatmap');
   const storeMap = document.querySelector('.store_map');
@@ -67,57 +63,57 @@ async function drawAreasAndTables() {
       return;
     }
 
-    // Dimensiones de la imagen del mapa
-    const mapWidth = storeMap.naturalWidth; // Ancho real de la imagen
-    const mapHeight = storeMap.naturalHeight; // Alto real de la imagen
+    const mapWidth = storeMap.clientWidth;
+    const mapHeight = storeMap.clientHeight;
 
     console.log(`Dimensiones reales de la imagen del mapa: ${mapWidth}x${mapHeight}`);
 
     const areas = await fetchAreasData();
     const mesas = await fetchMesasData();
 
-  
+    const minX = Math.min(...areas.map(area => area.cAreX));
+    const mesMinX = Math.min(...areas.map(area => area.cAreX));
 
-    // Limpiar el contenedor antes de agregar nuevas áreas y mesas
     heatmapContainer.innerHTML = '';
 
-    // Dibujar áreas
     areas.forEach(area => {
       const areaDiv = document.createElement('div');
       areaDiv.classList.add('map-area');
 
-      // Escalar coordenadas y dimensiones de las áreas
-      const scaledX = (area.cAreX / mapWidth) * storeMap.clientWidth;
+      const adjustedX = area.cAreX - minX;
+
+      // Escalamos las posiciones y tamaños del área
+      const scaledX = (adjustedX / mapWidth) * storeMap.clientWidth;
       const scaledY = (area.cAreY / mapHeight) * storeMap.clientHeight;
       const scaledWidth = (area.cAreAncho / mapWidth) * storeMap.clientWidth;
       const scaledHeight = (area.cAreAlto / mapHeight) * storeMap.clientHeight;
 
+      areaDiv.style.position = 'absolute';
       areaDiv.style.top = `${scaledY}px`;
       areaDiv.style.left = `${scaledX}px`;
       areaDiv.style.width = `${scaledWidth}px`;
       areaDiv.style.height = `${scaledHeight}px`;
-      areaDiv.innerText = area.cAreDesc; // Nombre del área
+      areaDiv.innerText = area.cAreDesc;
 
-      // Filtrar mesas que pertenecen a esta área
       const mesasEnArea = mesas.filter(mesa => mesa.cMesArea === area.cAreFolio);
 
-      // Dibujar mesas dentro del área
       mesasEnArea.forEach(mesa => {
         const mesaDiv = document.createElement('div');
         mesaDiv.classList.add('map-table');
+        mesaDiv.style.position = 'absolute';
 
-        // Escalar coordenadas y dimensiones de las mesas
-        const mesaScaledX = (mesa.cMesX / area.cAreAncho) * scaledWidth;
-        const mesaScaledY = (mesa.cMesY / area.cAreAlto) * scaledHeight;
-        const mesaScaledWidth = (mesa.cMesAncho / area.cAreAncho) * scaledWidth;
-        const mesaScaledHeight = (mesa.cMesAlto / area.cAreAlto) * scaledHeight;
+        // Calculamos la posición y tamaño escalados de la mesa dentro del área
+        const mesaScaledX = (area.cAreX / mesa.cMesX) * 100;//(mesa.cMesX / area.cAreAncho) * scaledWidth;
+        const mesaScaledY = (area.cAreY / mesa.cMesY) * 50;//(mesa.cMesY / area.cAreAlto) * scaledHeight;
+        const mesaScaledWidth = 50;//(mesa.cMesAncho / area.cAreAncho) * scaledWidth;
+        const mesaScaledHeight = 50;//(mesa.cMesAlto / area.cAreAlto) * scaledHeight;
 
         mesaDiv.style.top = `${mesaScaledY}px`;
         mesaDiv.style.left = `${mesaScaledX}px`;
         mesaDiv.style.width = `${mesaScaledWidth}px`;
         mesaDiv.style.height = `${mesaScaledHeight}px`;
-        mesaDiv.innerText = mesa.cMesNom; // Nombre de la mesa
-        mesaDiv.style.backgroundColor = getTableColor(mesa.cMesVentas); // Color basado en las ventas
+        mesaDiv.innerText = mesa.cMesNom;
+        mesaDiv.style.backgroundColor = getTableColor(mesa.cMesVentas);
 
         areaDiv.appendChild(mesaDiv);
       });
@@ -126,7 +122,6 @@ async function drawAreasAndTables() {
     });
   };
 
-  // Esperar a que la imagen cargue completamente antes de procesar
   if (storeMap.complete) {
     processMap();
   } else {
@@ -134,16 +129,15 @@ async function drawAreasAndTables() {
   }
 }
 
-// Función para obtener el color basado en las ventas
+
 function getTableColor(ventas) {
   if (ventas > 100) {
-    return 'rgba(255, 0, 0, 0.7)'; // Rojo para ventas altas
+    return 'rgba(255, 0, 0, 0.7)';
   } else if (ventas > 50) {
-    return 'rgba(255, 165, 0, 0.7)'; // Naranja para ventas medias
+    return 'rgba(255, 165, 0, 0.7)';
   } else {
-    return 'rgba(0, 255, 0, 0.7)'; // Verde para ventas bajas
+    return 'rgba(0, 255, 0, 0.7)';
   }
 }
 
-// Ejecutar la función al cargar la página
 window.onload = drawAreasAndTables;
